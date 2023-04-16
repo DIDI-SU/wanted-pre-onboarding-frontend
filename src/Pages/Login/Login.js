@@ -1,16 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
 import Input from "../../Components/Input/Input";
 import Button from "../../Components/button/button";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import axios from "axios";
 import { TokenContext } from "../../Context/TokenContext/TokenContext";
+import LoginSiginUp from "../../Components/UI/LoginSiginUp/LoginSiginUp";
 
 const url = "https://www.pre-onboarding-selection-task.shop/";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { userToken, setUserToken } = useContext(TokenContext);
-
+  const nav = useNavigate();
   const checkInput = (value, name) => {
     if ((name === "email") & value.includes("@")) {
       setEmail(value);
@@ -18,7 +21,6 @@ const Login = () => {
       setPassword(value);
     }
   };
-
   const handleValue = (e) => {
     const { name, value } = e.target;
     checkInput(value, name);
@@ -31,6 +33,7 @@ const Login = () => {
         password: password,
       });
       setUserToken(response.data);
+      nav("/todo");
     } catch (error) {
       if (error.response.data.statusCode === 401) {
         alert("비밀번호나 이메일을 확인해주세요");
@@ -43,22 +46,34 @@ const Login = () => {
   }, [userToken]);
 
   return (
-    <section>
-      <div className=" flex flex-col">
-        <Input testid="email-input" type="email" handleValue={handleValue} />
+    <LoginSiginUp>
+      <div className=" flex flex-col  items-center p-3">
+        <Input
+          testid="email-input"
+          type="email"
+          handleValue={handleValue}
+          className=" p-2 my-2"
+        />
         <Input
           testid="password-input"
           type="password"
           handleValue={handleValue}
+          className=" p-2 "
         />
       </div>
       <Button
+        className=" w-44 p-2 border-solid border-2 border-blue-950 rounded-md"
         testid="signin-button"
         title="로그인하기"
         onClick={handleSubmit}
       />
-      <Link to="/signup">회원가입하고 todo만들러가기</Link>
-    </section>
+
+      <Button
+        title={"회원가입하고 todo만들러가기"}
+        className=" my-1 p-2 border-solid border-2 border-blue-950 rounded-md"
+        onClick={() => nav("/signup")}
+      />
+    </LoginSiginUp>
   );
 };
 
