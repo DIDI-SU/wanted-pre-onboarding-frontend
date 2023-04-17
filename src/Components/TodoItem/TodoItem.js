@@ -1,18 +1,64 @@
 import React from "react";
 import Button from "../button/button";
-//testid, title, onClick, className
+const TodoItem = ({
+  todoList,
+  onClick,
+  isEdit,
+  handleEdit,
+  updateTodo,
+  setIsEdit,
+  setEditedTodo,
+  setCompleted,
+  completed,
+}) => {
+  return todoList.map(({ id, todo, isCompleted, userId }) => {
+    const checkSame = parseInt(isEdit) === parseInt(id);
 
-const TodoItem = () => {
-  return (
-    <li>
-      <label>
-        <input type="checkbox" />
-        <span>TODO 2</span>
-        <Button testid="modify-button" title="수정" />
-        <Button testid="delete-button" title="삭제" />
-      </label>
-    </li>
-  );
+    return (
+      <li id={id} key={id + todo}>
+        <label>
+          {!checkSame ? (
+            <>
+              <input
+                type="checkbox"
+                checked={isCompleted}
+                onChange={() => {
+                  setCompleted((prve) => !prve);
+                  setEditedTodo(todo);
+                  updateTodo(id, completed);
+                }}
+              />
+              <span>{todo}</span>
+              <Button
+                testid="modify-button"
+                title="수정"
+                onClick={(e) => handleEdit(e)}
+              />
+              <Button testid="delete-button" title="삭제" onClick={onClick} />
+            </>
+          ) : (
+            <>
+              <input
+                data-testid="modify-input"
+                placeholder={todo}
+                onChange={(e) => setEditedTodo(e.target.value)}
+              />
+              <Button
+                testid="submit-button"
+                title="제출"
+                onClick={() => updateTodo(isEdit, isCompleted)}
+              />
+              <Button
+                testid="cancel-button"
+                title="취소"
+                onClick={() => setIsEdit("")}
+              />
+            </>
+          )}
+        </label>
+      </li>
+    );
+  });
 };
 
 export default TodoItem;

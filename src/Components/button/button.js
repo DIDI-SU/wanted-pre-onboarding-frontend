@@ -5,8 +5,8 @@ const Button = ({ testid, title, onClick, className }) => {
     <button
       className={("border-solid border-2", className)}
       data-testid={testid}
-      onClick={() => {
-        onClick();
+      onClick={(e) => {
+        onClick(e);
       }}
     >
       {title}
