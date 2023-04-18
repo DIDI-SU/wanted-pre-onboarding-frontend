@@ -20,6 +20,8 @@ const AppRouter = () => {
           </ProtectedRoute>
         }
       />
+
+      <Route path="*" element={<Main />} />
     </Routes>
   );
 };
