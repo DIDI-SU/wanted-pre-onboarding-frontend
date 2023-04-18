@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
-import Main from "../Pages/Main/Main";
 import Login from "../Pages/Login/Login";
 import SignUp from "../SignUp/SignUp";
 import MainToDo from "../Pages/MainToDo/MainToDo";
+import Main from "../Pages/Main/Main";
 
 const AppRouter = () => {
   return (
