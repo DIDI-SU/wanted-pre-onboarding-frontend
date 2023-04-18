@@ -10,18 +10,8 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [emailVal, setEmailVal] = useState(false);
   const [passwordVal, setPasswordVal] = useState(false);
-
-  const [isVal, setIsVal] = useState("");
   const [error, setError] = useState("");
   const nav = useNavigate();
-
-  const checkInput = (value, name) => {
-    if ((name === "email") & value.includes("@")) {
-      setEmail(value);
-    } else if ((name === "password") & (value.length >= 8)) {
-      setPassword(value);
-    }
-  };
 
   const handleValue = (e) => {
     const { name, value } = e.target;
