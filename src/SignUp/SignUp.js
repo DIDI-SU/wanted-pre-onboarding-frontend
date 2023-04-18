@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../Components/Input/Input";
 import Button from "../Components/button/button";
 import axios from "axios";
@@ -8,8 +8,11 @@ const url = "https://www.pre-onboarding-selection-task.shop/auth/signup";
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailVal, setEmailVal] = useState(false);
+  const [passwordVal, setPasswordVal] = useState(false);
+
+  const [isVal, setIsVal] = useState("");
   const [error, setError] = useState("");
-  const [disabled, setDisabled] = useState("");
   const nav = useNavigate();
 
   const checkInput = (value, name) => {
@@ -17,14 +20,16 @@ const SignUp = () => {
       setEmail(value);
     } else if ((name === "password") & (value.length >= 8)) {
       setPassword(value);
-    } else {
-      setDisabled("disabled");
     }
   };
 
   const handleValue = (e) => {
     const { name, value } = e.target;
-    checkInput(value, name);
+    if (name === "email") {
+      setEmail(value);
+    } else if (name === "password") {
+      setPassword(value);
+    }
   };
   const handleSubmit = async () => {
     try {
@@ -39,6 +44,27 @@ const SignUp = () => {
       alert(error.response.data.message);
     }
   };
+
+  useEffect(() => {
+    if (email.includes("@")) {
+      const timeout = setTimeout(() => setEmailVal(true), 1000);
+      return () => clearTimeout(timeout);
+    } else {
+      const timeout = setTimeout(() => setEmailVal(false), 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [email]);
+
+  useEffect(() => {
+    if (password.length >= 8) {
+      const timeout = setTimeout(() => setPasswordVal(true), 1000);
+      return () => clearTimeout(timeout);
+    } else {
+      const timeout = setTimeout(() => setPasswordVal(false), 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [password]);
+  console.log(emailVal & passwordVal);
 
   return (
     <LoginSiginUp>
@@ -60,7 +86,8 @@ const SignUp = () => {
         testid="signup-button"
         title="회원가입하기"
         onClick={handleSubmit}
-        className={`my-1 p-2 border-solid border-2 border-blue-950 rounded-md ${disabled}`}
+        className={`my-1 p-2 border-solid border-2 border-blue-950 rounded-md`}
+        isDisabled={emailVal & passwordVal ? "" : "disabled"}
       />
     </LoginSiginUp>
   );

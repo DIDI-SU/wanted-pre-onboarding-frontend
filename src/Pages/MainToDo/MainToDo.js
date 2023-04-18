@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import TodoItem from "../../Components/TodoItem/TodoItem";
 import Input from "../../Components/Input/Input";
-import { TokenContext } from "../../Context/TokenContext/TokenContext";
+
 import axios from "axios";
 import Button from "../../Components/button/button";
+
 const url = "https://www.pre-onboarding-selection-task.shop";
-//testid, type, handleValue, className
-// /testid, title, onClick, className
 
 const MainToDo = () => {
   const [newTodo, setNewTodo] = useState("");
@@ -14,10 +13,7 @@ const MainToDo = () => {
   const [isLoading, setLoading] = useState(false);
   const [isEdit, setIsEdit] = useState("");
   const [completed, setCompleted] = useState(false);
-
   const [editedTodo, setEditedTodo] = useState("");
-
-  const { TOKEN } = useContext(TokenContext);
 
   useEffect(() => {
     getItem();
@@ -29,18 +25,20 @@ const MainToDo = () => {
 
   const sumbmitTodo = async () => {
     try {
+      const TOKEN = JSON.parse(localStorage.getItem("TOKEN"));
       const response = await axios.post(
         url + "/todos",
         { todo: newTodo },
         {
           headers: {
-            Authorization: "Bearer " + TOKEN.access_token,
+            Authorization: "Bearer " + TOKEN,
             "Content-Type": "application/json",
           },
         }
       );
-      console.log(response.data);
-      getItem();
+      if (response.status === 200) {
+        getItem();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -48,14 +46,18 @@ const MainToDo = () => {
 
   const getItem = async () => {
     try {
+      const TOKEN = JSON.parse(localStorage.getItem("TOKEN"));
       const response = await axios.get(url + "/todos", {
         headers: {
-          Authorization: "Bearer " + TOKEN.access_token,
+          Authorization: "Bearer " + TOKEN,
           "Content-Type": "application/json",
         },
       });
-      setLoading(true);
-      setTodoList(response.data);
+      if (response.status === 200) {
+        setLoading(true);
+        setTodoList(response.data);
+        setNewTodo("");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -64,14 +66,17 @@ const MainToDo = () => {
   const deleteItem = async (e) => {
     const { id } = e.target.parentElement.parentElement;
     try {
+      const TOKEN = JSON.parse(localStorage.getItem("TOKEN"));
       const response = await axios.delete(url + `/todos/${id}`, {
         headers: {
-          Authorization: "Bearer " + TOKEN.access_token,
+          Authorization: "Bearer " + TOKEN,
           "Content-Type": "application/json",
         },
       });
       setLoading(true);
-      getItem();
+      if (response.status === 204) {
+        getItem();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -84,6 +89,7 @@ const MainToDo = () => {
 
   const updateTodo = async (id, isCompleted) => {
     try {
+      const TOKEN = JSON.parse(localStorage.getItem("TOKEN"));
       const response = await axios.put(
         url + `/todos/${id}`,
         {
@@ -92,15 +98,17 @@ const MainToDo = () => {
         },
         {
           headers: {
-            Authorization: "Bearer " + TOKEN.access_token,
+            Authorization: "Bearer " + TOKEN,
             "Content-Type": "application/json",
           },
         }
       );
-      setLoading(true);
-      getItem();
-      setIsEdit("");
-      console.log(editedTodo, isCompleted);
+
+      if (response.status === 200) {
+        setLoading(true);
+        getItem();
+        setIsEdit("");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -108,8 +116,18 @@ const MainToDo = () => {
 
   return (
     <main>
-      <Input testid="new-todo-input" type="text" handleValue={addTodo} />
-      <Button testid="new-todo-add-button" onClick={sumbmitTodo} title="추가" />
+      <Input
+        testid="new-todo-input"
+        type="text"
+        handleValue={addTodo}
+        value={newTodo}
+      />
+      <Button
+        testid="new-todo-add-button"
+        onClick={sumbmitTodo}
+        title="추가"
+        isDisabled=""
+      />
       <ul>
         {isLoading && (
           <TodoItem

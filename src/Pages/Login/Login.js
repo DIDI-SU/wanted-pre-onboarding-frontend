@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Input from "../../Components/Input/Input";
 import Button from "../../Components/button/button";
 import { useNavigate } from "react-router-dom";
-
 import axios from "axios";
-import { TokenContext } from "../../Context/TokenContext/TokenContext";
 import LoginSiginUp from "../../Components/UI/LoginSiginUp/LoginSiginUp";
 
 const url = "https://www.pre-onboarding-selection-task.shop/";
@@ -12,8 +10,8 @@ const url = "https://www.pre-onboarding-selection-task.shop/";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { userToken, setUserToken } = useContext(TokenContext);
   const nav = useNavigate();
+
   const checkInput = (value, name) => {
     if ((name === "email") & value.includes("@")) {
       setEmail(value);
@@ -32,7 +30,10 @@ const Login = () => {
         email: email,
         password: password,
       });
-      setUserToken(response.data);
+      window.localStorage.setItem(
+        "TOKEN",
+        JSON.stringify(response.data.access_token)
+      );
       nav("/todo");
     } catch (error) {
       if (error.response.data.statusCode === 401) {
@@ -41,22 +42,20 @@ const Login = () => {
     }
   };
 
-  useEffect(() => {
-    window.localStorage.setItem("TOKEN", JSON.stringify(userToken));
-  }, [userToken]);
-
   return (
     <LoginSiginUp>
       <div className=" flex flex-col  items-center p-3">
         <Input
           testid="email-input"
           type="email"
+          value={email}
           handleValue={handleValue}
           className=" p-2 my-2"
         />
         <Input
           testid="password-input"
           type="password"
+          value={password}
           handleValue={handleValue}
           className=" p-2 "
         />

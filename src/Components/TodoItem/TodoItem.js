@@ -11,7 +11,7 @@ const TodoItem = ({
   setCompleted,
   completed,
 }) => {
-  return todoList.map(({ id, todo, isCompleted, userId }) => {
+  return todoList.map(({ id, todo, isCompleted }) => {
     const checkSame = parseInt(isEdit) === parseInt(id);
 
     return (
@@ -34,7 +34,12 @@ const TodoItem = ({
                 title="수정"
                 onClick={(e) => handleEdit(e)}
               />
-              <Button testid="delete-button" title="삭제" onClick={onClick} />
+              <Button
+                testid="delete-button"
+                title="삭제"
+                onClick={onClick}
+                isDisabled=""
+              />
             </>
           ) : (
             <>
@@ -47,11 +52,13 @@ const TodoItem = ({
                 testid="submit-button"
                 title="제출"
                 onClick={() => updateTodo(isEdit, isCompleted)}
+                isDisabled=""
               />
               <Button
                 testid="cancel-button"
                 title="취소"
                 onClick={() => setIsEdit("")}
+                isDisabled=""
               />
             </>
           )}

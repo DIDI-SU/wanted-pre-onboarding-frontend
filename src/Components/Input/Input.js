@@ -1,6 +1,6 @@
 import React from "react";
 
-const Input = ({ testid, type, handleValue, className }) => {
+const Input = ({ testid, type, handleValue, className, value }) => {
   return (
     <input
       className={className}
@@ -8,6 +8,7 @@ const Input = ({ testid, type, handleValue, className }) => {
       data-testid={testid}
       name={type}
       type={type}
+      value={value}
       onChange={(e) => {
         handleValue(e);
       }}

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Button = ({ testid, title, onClick, className }) => {
+const Button = ({ testid, title, onClick, className, isDisabled }) => {
   return (
     <button
       className={("border-solid border-2", className)}
@@ -8,6 +8,7 @@ const Button = ({ testid, title, onClick, className }) => {
       onClick={(e) => {
         onClick(e);
       }}
+      disabled={isDisabled}
     >
       {title}
     </button>
