@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import TodoItem from "../../Components/TodoItem/TodoItem";
 import Input from "../../Components/Input/Input";
-
 import axios from "axios";
 import Button from "../../Components/button/button";
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const url = "https://www.pre-onboarding-selection-task.shop";
 
@@ -15,14 +14,14 @@ const MainToDo = () => {
   const [isEdit, setIsEdit] = useState("");
   const [completed, setCompleted] = useState(false);
   const [editedTodo, setEditedTodo] = useState("");
-  const loaction = useLocation();
+  const nav = useNavigate();
 
   useEffect(() => {
     const TOKEN = JSON.parse(localStorage.getItem("TOKEN"));
     if (TOKEN) {
       getItem();
     } else {
-      loaction("/signin");
+      nav("/signin");
     }
   }, []);
 
