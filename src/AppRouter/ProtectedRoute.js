@@ -1,10 +1,4 @@
-import {
-  Routes,
-  Route,
-  NavLink,
-  Navigate,
-  useNavigate,
-} from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
   const TOKEN = JSON.parse(localStorage.getItem("TOKEN"));
