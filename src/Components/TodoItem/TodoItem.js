@@ -10,6 +10,7 @@ const TodoItem = ({
   setEditedTodo,
   setCompleted,
   completed,
+  updateCheckBox,
 }) => {
   return todoList.map(({ id, todo, isCompleted }) => {
     const checkSame = parseInt(isEdit) === parseInt(id);
@@ -25,7 +26,7 @@ const TodoItem = ({
                 onChange={() => {
                   setCompleted((prve) => !prve);
                   setEditedTodo(todo);
-                  updateTodo(id, completed);
+                  updateCheckBox(id, completed);
                 }}
               />
               <span>{todo}</span>

@@ -57,6 +57,7 @@ const MainToDo = () => {
       });
 
       if (response.status === 200) {
+        console.log(editedTodo);
         setLoading(true);
         setTodoList(response.data);
         setNewTodo("");
@@ -94,7 +95,7 @@ const MainToDo = () => {
     try {
       const TOKEN = JSON.parse(localStorage.getItem("TOKEN"));
       const response = await axios.put(
-        url + `/todos/${id}`,
+        url + `/todos/${parseInt(id)}`,
         {
           todo: editedTodo,
           isCompleted: isCompleted,
@@ -108,8 +109,7 @@ const MainToDo = () => {
       );
 
       if (response.status === 200) {
-        console.log(response);
-        console.log(id);
+        setEditedTodo("");
         setLoading(true);
         getItem();
         setIsEdit("");
@@ -119,7 +119,33 @@ const MainToDo = () => {
     }
   };
 
-  console.log(todoList);
+  const updateCheckBox = async (id, isCompleted) => {
+    try {
+      const TOKEN = JSON.parse(localStorage.getItem("TOKEN"));
+      const response = await axios.put(
+        url + `/todos/${parseInt(id)}`,
+        {
+          todo: editedTodo,
+          isCompleted: isCompleted,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + TOKEN,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setLoading(true);
+        getItem();
+        setIsEdit("");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <main>
       <Input
@@ -146,6 +172,7 @@ const MainToDo = () => {
             handleEdit={handleEdit}
             updateTodo={updateTodo}
             completed={completed}
+            updateCheckBox={updateCheckBox}
             setCompleted={setCompleted}
           />
         )}
