@@ -21,6 +21,7 @@ const SignUp = () => {
       setPassword(value);
     }
   };
+
   const handleSubmit = async () => {
     try {
       const response = await axios.post(url, {
@@ -54,7 +55,6 @@ const SignUp = () => {
       return () => clearTimeout(timeout);
     }
   }, [password]);
-  console.log(emailVal & passwordVal);
 
   return (
     <LoginSiginUp>

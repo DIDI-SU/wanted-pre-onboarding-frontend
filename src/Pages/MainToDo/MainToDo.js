@@ -36,7 +36,9 @@ const MainToDo = () => {
           },
         }
       );
-      if (response.status === 200) {
+
+      if (response.status === 201) {
+        setLoading(true);
         getItem();
       }
     } catch (error) {
@@ -53,6 +55,7 @@ const MainToDo = () => {
           "Content-Type": "application/json",
         },
       });
+
       if (response.status === 200) {
         setLoading(true);
         setTodoList(response.data);
@@ -105,6 +108,8 @@ const MainToDo = () => {
       );
 
       if (response.status === 200) {
+        console.log(response);
+        console.log(id);
         setLoading(true);
         getItem();
         setIsEdit("");
@@ -114,6 +119,7 @@ const MainToDo = () => {
     }
   };
 
+  console.log(todoList);
   return (
     <main>
       <Input

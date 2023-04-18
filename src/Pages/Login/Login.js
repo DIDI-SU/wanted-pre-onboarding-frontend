@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "../../Components/Input/Input";
 import Button from "../../Components/button/button";
 import { useNavigate } from "react-router-dom";
@@ -10,19 +10,38 @@ const url = "https://www.pre-onboarding-selection-task.shop/";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailVal, setEmailVal] = useState(false);
+  const [passwordVal, setPasswordVal] = useState(false);
   const nav = useNavigate();
 
-  const checkInput = (value, name) => {
-    if ((name === "email") & value.includes("@")) {
+  const handleValue = (e) => {
+    const { name, value } = e.target;
+    if (name === "email") {
       setEmail(value);
-    } else if ((name === "password") & (value.length >= 8)) {
+    } else if (name === "password") {
       setPassword(value);
     }
   };
-  const handleValue = (e) => {
-    const { name, value } = e.target;
-    checkInput(value, name);
-  };
+
+  useEffect(() => {
+    if (email.includes("@")) {
+      const timeout = setTimeout(() => setEmailVal(true), 1000);
+      return () => clearTimeout(timeout);
+    } else {
+      const timeout = setTimeout(() => setEmailVal(false), 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [email]);
+
+  useEffect(() => {
+    if (password.length >= 8) {
+      const timeout = setTimeout(() => setPasswordVal(true), 1000);
+      return () => clearTimeout(timeout);
+    } else {
+      const timeout = setTimeout(() => setPasswordVal(false), 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [password]);
 
   const handleSubmit = async () => {
     try {
@@ -61,10 +80,11 @@ const Login = () => {
         />
       </div>
       <Button
-        className=" w-44 p-2 border-solid border-2 border-blue-950 rounded-md"
         testid="signin-button"
         title="로그인하기"
         onClick={handleSubmit}
+        className={`my-1 p-2 border-solid border-2 border-blue-950 rounded-md`}
+        isDisabled={emailVal & passwordVal ? "" : "disabled"}
       />
 
       <Button
